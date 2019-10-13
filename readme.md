@@ -31,8 +31,8 @@ Additionally, pings to healthcheck.io are made. The current system temperature i
 a simple script which sets the fans to a static pre-defined speed (1560 RPM).
 It first enables static control, and then sets a static speed
 
-#### Some of the notes from the original repo
-I found super useful in understanding how the IPMI parts works. I've edited bits, so please accept any mistakes as mine.
+#### Some of the notes from the original repo:
+(I found super useful in understanding how the IPMI parts works. I've edited bits, so please accept any mistakes as mine.)
 
 #### Howto: Manually set the fan speed of the Dell R610/R710
 
