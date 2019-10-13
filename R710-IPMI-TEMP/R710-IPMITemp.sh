@@ -1,5 +1,5 @@
 #!/bin/bash
-https://github.com/craigerrington/rfan/blob/initial-changes/R710-IPMI-TEMP/monitor.sh
+
 # ----------------------------------------------------------------------------------
 # Script for checking the temperature reported by the ambient temperature sensor,
 # and if deemed too high send the raw IPMI command to enable dynamic fan control.
