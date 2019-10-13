@@ -3,11 +3,12 @@
 # ----------------------------------------------------------------------------------
 # Script for setting low fan speds/noise on Dell R710 servers.
 #
-# This should be run as a cron job every 1 minute.
+# This should be run as a cron job every 1 minute:
 #
-# On first launch, if the detected ambient temperature is below the defined threshold, a static fan speed of 1560 RPM.
+# * * * * * /path/to/rfan.sh
 #
-# The script then performs ongoing monitoring using the temperature reported by the ambient temperature sensor.
+# On launch, if the detected ambient temperature is below the defined threshold, a static fan speed of 1560 RPM.
+#
 # If deemed too high send the raw IPMI command to enable dynamic fan control. Dynamic fan control will ramp up
 # the fan speed to bring the temperatures down.
 #
@@ -16,15 +17,13 @@
 #
 # Monitoring and Alerting:
 #
-# Every time the script runs, a ping is sent to healthcheck.io
-# Each ping contains the current server temperature to be included in logging.
-# Any time the temperature threshold is triggers, it'll set a FAIL status in the ping to allow for notifications
+# Every time the script runs, a ping is sent to healthcheck.io Each ping contains the temperature to be included in logging.
+# Whenevr the temperature rises above the threshold, it'll set a FAIL status in the ping to allow for notifications
 # and other integrations.
 #
-#
 # Requires:
-# ipmitool – apt-get install ipmitool
-# An account and registered check at https://healthchecks.io (take note of the unique ID)
+# ipmitool & curl
+# An account and registered check from https://healthchecks.io (take note of the unique ID)
 #
 # Search for and replace:
 # [ip-of-drac]: The IP address of your IPMI server, your DRAC management IP
