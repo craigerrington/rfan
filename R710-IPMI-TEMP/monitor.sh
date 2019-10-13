@@ -5,7 +5,7 @@
 # and if deemed too high send the raw IPMI command to enable dynamic fan control.
 #
 # This is designed to be run as a cron job, subsequent to manually lowering fan speeds
-# with the sister script "set_temp.sh".
+# with the sister script "setfans.sh".
 #
 # The script checks for the current system temperature. If it's above the set threshold,
 # it will enable dynamic fan control to speed up the fans. It'll also send a FAIL alert to healthcheck.io
