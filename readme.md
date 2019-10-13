@@ -2,14 +2,18 @@
 
 `rfan.sh` is a **dangerous bash script** for making the fans on Dell R710 a good bit quieter than they are in "automatic" mode.
 
-It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
+This exists so I can use it. If you choose to use it too, I recommend you read the originating repo and understand what each command does. 
+
+It is based on the scripts found in the [`NoLooseEnds/Scripts`](https://github.com/NoLooseEnds/Scripts) repo, modified versions of which are included in this repository, the most important notes are at the bottom of this README.
+
+The changes I've made to the original scripts are:
 
 - Created the combo script `rfan.sh`.
 - lowered the default speed further
 - updated some of the journalctl logging.
-- added temperatures to the healthcheck.io reporting
-- added failure reporting for integrations with healthcheck.io
-- removed the slack integration
+- added temperatures to the `healthcheck.io` reporting.
+- added failure reporting for integrations with `healthcheck.io`.
+- removed the slack integration.
 
 Each of the scripts requires the `ipmitool` and `curl` packages and `IPMI over LAN` enabled on the server iDrac.
 
@@ -23,9 +27,9 @@ With the default configuration (and taking no heed to all the notes below and al
 
 - Check the temperature from the server.
 - If it's below the defined threshold, it'll set the static speed of the fans to 1560 RPM, which should be pretty quiet.
-- It'll check on each run for the temperature, and should the temperature rise above the threshold, it'll re-enable automatic fan control (nice and noisy) to reduce the temperatures
-- Once the temperatue is back below the threshold, static fan speeds will be re-enabled back to 1560 RPM
-- Includes all of the monitoring features described below in `monitor.sh`
+- It'll check on each run for the temperature, and should the temperature rise above the threshold, it'll re-enable automatic fan control (nice and noisy) to reduce the temperatures.
+- Once the temperatue is back below the threshold, static fan speeds will be re-enabled back to 1560 RPM.
+- Includes all of the monitoring features described below in `monitor.sh`.
 
 ### `monitor.sh`
 monitor.sh should be scheduled with cron.
