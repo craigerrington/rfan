@@ -1,4 +1,6 @@
-This is a pair of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the NoLooseEnds/Scripts folder. Most of the changes I've made are around the monitoring and failure alerting with healthcheck.io
+# rfan
+
+rfan is a pair of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the NoLooseEnds/Scripts folder. Most of the changes I've made are around the monitoring and failure alerting with healthcheck.io
 
 Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
 
@@ -13,8 +15,6 @@ Every time it runs, it reads the current system temp. If the temp is above a set
 
 Additionally, ping to healthcheck.io. The current system temperature is sent using the curl User Agent header. healthcheck.io extracts this data for logging. For a healthy temperature, a healthy ping is sent along with the current system temperature. In the event of a high temp detection, a failure alert is sent to healthcheck.io - this can be combined with automations from email alerts to slack. Because of the way healthcheck.io extracts the User Agent string, you can also use the current system temp in the automations.
 
-
-
 ## Some of the notes from the original repo I found super useful in understanding how the IPMI parts works.
 (I've edited bits, so please accept any mistakes as mine) 
 
@@ -25,7 +25,6 @@ Additionally, ping to healthcheck.io. The current system temperature is sent usi
 3. Run the following command to issue IPMI commands: 
 `ipmitool -I lanplus -H <iDracip> -U root -P <rootpw> <command>`
 
-
 **Enable manual/static fan speed:**
 
 `raw 0x30 0x30 0x01 0x00`
@@ -35,23 +34,17 @@ Additionally, ping to healthcheck.io. The current system temperature is sent usi
 (Use i.e http://www.hexadecimaldictionary.com/hexadecimal/0x14/ to calculate speed from decimal to hex)
 
 *3000 RPM*: `rw 0x30 0x30 0x02 0xff 0x10`
-
 *2160 RPM*: `raw 0x30 0x30 0x02 0xff 0x0a`
-
 *1560 RPM*: `raw 0x30 0x30 0x02 0xff 0x09`
-
 _Note: The RPM may differ from model to model_
-
 
 **Disable / Return to automatic fan control:**
 
 `raw 0x30 0x30 0x01 0x01`
 
-
 **Other: List all output from IPMI**
 
 `sdr elist all`
-
 
 **Example of a command:**
 
