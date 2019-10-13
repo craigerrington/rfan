@@ -1,5 +1,3 @@
-# INFO
+These are some fan control and monitoring scripts for Dell R710/IPMI compatible servers.
 
-This is my personal scripts. Feel free to modify and improve.
-
-They are provided "as is", and I take no responsibility if they break something on your end. 
+This is based on a script by https://github.com/NoLooseEnds
