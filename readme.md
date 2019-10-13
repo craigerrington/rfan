@@ -1,6 +1,6 @@
 # rfan
 
-`rfan.sh` is a dangerous bash script for working with the fans on a Dell R710. It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
+`rfan.sh` is a **dangerous bash script** for making the fans on Dell R710 a good bit quieter than they are in "automatic" mode. It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
 
 - Created the combo script `rfan.sh`.
 - enhanced monitoring and failure alerts with healthcheck.io.
@@ -9,7 +9,7 @@
 - added failure reporting for integrations with healthcheck.io
 - removed the slack integration
 
-Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
+Each of the scripts requires the `ipmitool` and `curl` packages and `IPMI over LAN` enabled on the server iDrac.
 
 ### `rfan.sh`
 
