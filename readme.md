@@ -9,7 +9,7 @@ a simple script which sets the fans to a static pre-defined speed (1560 RPM).
 It first enables static control, and then sets a static speed
 
 ### monitor.sh
-monitor.sh is designed to be scheduled with cron.
+monitor.sh should be scheduled with cron.
 
 Every time it runs, it reads the current system temp. If the temp is above a set threshold, it immediately disables static fan control. This has the effect of enabling automatic controls, which will allow the fans to ramp up to the required speed to cool the server down.
 
