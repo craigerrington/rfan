@@ -5,6 +5,7 @@
 It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
 
 - Created the combo script `rfan.sh`.
+- lowered the default speed further
 - updated some of the journalctl logging.
 - added temperatures to the healthcheck.io reporting
 - added failure reporting for integrations with healthcheck.io
