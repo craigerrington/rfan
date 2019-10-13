@@ -6,7 +6,7 @@ Both scripts require the ipmitool package to be installed and IPMI over LAN enab
 
 ### rfan.sh
 
-I take no responsibility if this script causes your server to catch fire.
+The beautiful monster. I take no responsibility if this script causes your server to catch fire. Seriously. There's a chance this will make things catch fire. I am not an expert. I took some other scripts, mashed them together and added some nice reporting. Do not trust me with your life.
 
 This is the all in one script, if you are lazy AND BRAVE, this is what you want. This combines the features of `setfan.sh` and `monitor.sh`. It is designed to be scheduled with `cron` to run *every minute*.
 
