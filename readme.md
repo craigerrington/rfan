@@ -13,7 +13,7 @@ monitor.sh is designed to be scheduled with cron.
 
 Every time it runs, it reads the current system temp. If the temp is above a set threshold, it immediately disables static fan control. This has the effect of enabling automatic controls, which will allow the fans to ramp up to the required speed to cool the server down.
 
-Additionally, ping to healthcheck.io. The current system temperature is sent using the curl User Agent header. healthcheck.io extracts this data for logging. For a healthy temperature, a healthy ping is sent along with the current system temperature. In the event of a high temp detection, a failure alert is sent to healthcheck.io - this can be combined with automations from email alerts to slack. Because of the way healthcheck.io extracts the User Agent string, you can also use the current system temp in the automations.
+Additionally, pings to healthcheck.io are made. The current system temperature is sent using the curl `User Agent` header. healthcheck.io extracts this data for logging. For a healthy temperature, a healthy ping is sent along with the current system temperature. In the event of a high temp detection, a failure alert is sent to healthcheck.io - this can be combined with automations from email alerts to slack. Because of the way healthcheck.io extracts the `User Agent` string, this data is available to your automations.
 
 ![screenshot](/media/sshot.PNG)
 
