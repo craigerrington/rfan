@@ -1,70 +1,51 @@
-# Safety BASH script
-I made a BASH script to check the temperature, and if it's higher than XX (27 degrees C in my case) it sends a raw command to restore automatic fan control. 
+# rfan
 
-I'm running this on an Ubuntu VM on ESXi (on the R710 box), but it should be able to run as long as you have ipmitools. It could be you need to modify the logging, to make it work with whatever your system use.
+rfan is a pair of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the NoLooseEnds/Scripts folder. Most of the changes I've made are around the monitoring and failure alerting with healthcheck.io
 
-I run the script via CRON every 5 minutes from my Ubuntu Server VM running on ESXi.
+Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
 
-`*/5 * * * * /bin/bash /path/to/script/R710-IPMITemp.sh > /dev/null 2>&1`
+## setfans.sh
+a simple script which sets the fans to a static pre-defined speed (1560 RPM).
+It first enables static control, and then sets a static speed
 
-Notice that I use [healthchecks.io](https://healthchecks.io) in the script to notify if the temp goes to high (it would also trigger if the internet goes down for some reason). Remember to get your own check URL if you want it, or else just remove the curl command.
+## monitor.sh
+monitor.sh is designed to be scheduled with cron.
 
-I'm also currently testing out [slacktee.sh](https://github.com/course-hero/slacktee) to get notifications in my slack channel.
+Every time it runs, it reads the current system temp. If the temp is above a set threshold, it immediately disables static fan control. This has the effect of enabling automatic controls, which will allow the fans to ramp up to the required speed to cool the server down.
 
+Additionally, ping to healthcheck.io. The current system temperature is sent using the curl User Agent header. healthcheck.io extracts this data for logging. For a healthy temperature, a healthy ping is sent along with the current system temperature. In the event of a high temp detection, a failure alert is sent to healthcheck.io - this can be combined with automations from email alerts to slack. Because of the way healthcheck.io extracts the User Agent string, you can also use the current system temp in the automations.
 
-The Scripts [Reddit thread](https://www.reddit.com/r/homelab/comments/779cha/manual_fan_control_on_r610r710_including_script/)
+## Some of the notes from the original repo I found super useful in understanding how the IPMI parts works.
+(I've edited bits, so please accept any mistakes as mine) 
 
-*****
-
-# Howto: Setting the fan speed of the Dell R610/R710
+# Howto: Manually set the fan speed of the Dell R610/R710
 
 1. Enable IPMI in iDrac
 2. Install ipmitool on linux, win or mac os
 3. Run the following command to issue IPMI commands: 
 `ipmitool -I lanplus -H <iDracip> -U root -P <rootpw> <command>`
 
-
 **Enable manual/static fan speed:**
 
 `raw 0x30 0x30 0x01 0x00`
-
 
 **Set fan speed:**
 
 (Use i.e http://www.hexadecimaldictionary.com/hexadecimal/0x14/ to calculate speed from decimal to hex)
 
-*3000 RPM*: `raw 0x30 0x30 0x02 0xff 0x10`
-
+*3000 RPM*: `rw 0x30 0x30 0x02 0xff 0x10`
 *2160 RPM*: `raw 0x30 0x30 0x02 0xff 0x0a`
-
 *1560 RPM*: `raw 0x30 0x30 0x02 0xff 0x09`
-
 _Note: The RPM may differ from model to model_
-
 
 **Disable / Return to automatic fan control:**
 
 `raw 0x30 0x30 0x01 0x01`
 
-
 **Other: List all output from IPMI**
 
 `sdr elist all`
 
-
 **Example of a command:**
 
 `ipmitool -I lanplus -H 192.168.0.120 -U root -P calvin  raw 0x30 0x30 0x02 0xff 0x10`
-
-
-*****
-
-**Disclaimer**
-
-I'm by no means good at IPMI, BASH scripting or regex, etc. but it seems to work fine for me. 
-
-TLDR; I take _NO_ responsibility if you mess up anything.
-
-*****
-
-All of this was inspired by [this Reddit post](https://www.reddit.com/r/homelab/comments/72qust/r510_noise/dnkofsv/) by /u/whitekidney 
