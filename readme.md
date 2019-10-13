@@ -59,6 +59,6 @@ Set fan speed (use something like http://www.hexadecimaldictionary.com/hexadecim
  - *1560 RPM*: `raw 0x30 0x30 0x02 0xff 0x09`
  - _Note: The RPM may differ from model to model_
 
-Disable/return to automatic fan control: `raw 0x30 0x30 0x01 0x01
+Disable/return to automatic fan control: `raw 0x30 0x30 0x01 0x01`
 
 List all output from IPMI: `sdr elist all`
