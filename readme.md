@@ -1,6 +1,6 @@
 # rfan
 
-rfan is a pair of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the NoLooseEnds/Scripts folder. Most of the changes I've made are around the monitoring and failure alerting with healthcheck.io
+rfan is a pair of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the `NoLooseEnds/Scripts` repo. Other than some cleanup and changed defaults, so far most of the changes I've made personally are around the monitoring and enhanced failure alerts with healthcheck.io.
 
 Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
 
@@ -35,6 +35,6 @@ Set fan speed (use something like http://www.hexadecimaldictionary.com/hexadecim
  - *1560 RPM*: `raw 0x30 0x30 0x02 0xff 0x09`
  - _Note: The RPM may differ from model to model_
 
-Disable / Return to automatic fan control: `raw 0x30 0x30 0x01 0x01`
+Disable / Return to automatic fan control: `raw 0x30 0x30 0x01 0x01
 
 List all output from IPMI: `sdr elist all`
