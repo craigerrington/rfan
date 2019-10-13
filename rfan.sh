@@ -1,19 +1,26 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Script for checking the temperature reported by the ambient temperature sensor,
-# and if deemed too high send the raw IPMI command to enable dynamic fan control.
+# Script for setting low fan speds/noise on Dell R710 servers.
 #
-# This is designed to be run as a cron job, subsequent to manually lowering fan speeds
-# with the sister script "setfans.sh".
+# This should be run as a cron job every 1 minute.
 #
-# The script checks for the current system temperature. If it's above the set threshold,
-# it will enable dynamic fan control to speed up the fans. It'll also send a FAIL alert to healthcheck.io
-# You can configure automations such as email or slack notifications from there to be notified of the event.
-# If all is OK, a healthy ping is sent to healthcheck.io
+# On first launch, if the detected ambient temperature is below the defined threshold, a static fan speed of 1560 RPM.
 #
-# In either case, the current system temperature is sent by curl using the User Agent field. 
-# This is extracted by healthcheck.io, shown in the logs, and can be used in your automations.
+# The script then performs ongoing monitoring using the temperature reported by the ambient temperature sensor.
+# If deemed too high send the raw IPMI command to enable dynamic fan control. Dynamic fan control will ramp up
+# the fan speed to bring the temperatures down.
+#
+# When the temperature is detected to be back below the defined threshold, then the static speeds are re-enabled 
+# to reduce fan speed/noise.
+#
+# Monitoring and Alerting:
+#
+# Every time the script runs, a ping is sent to healthcheck.io
+# Each ping contains the current server temperature to be included in logging.
+# Any time the temperature threshold is triggers, it'll set a FAIL status in the ping to allow for notifications
+# and other integrations.
+#
 #
 # Requires:
 # ipmitool – apt-get install ipmitool
@@ -25,6 +32,7 @@
 # [drac-password]: Password for DRAC (default is calvin)
 # [ipmiek]: IPMI over LAN encryption key (default is 0000000000000000000000000000000000000000)
 # [hc-uuid]: With the unique ID from a registered check at https://healthchecks.io
+# [temp]: With the temperature threshold in degrees celcius, for example 32
 #
 # ----------------------------------------------------------------------------------
 
@@ -38,7 +46,7 @@ IPMIEK=[ipmiek]
 # TEMPERATURE
 # Change this to the temperature in celcius you are comfortable with.
 # If the temperature goes above the set degrees it will send raw IPMI command to enable dynamic fan control
-MAXTEMP=32
+MAXTEMP=[temp]
 
 # This variable sends a IPMI command to get the temperature, and outputs it as two digits.
 # Do not edit unless you know what you do.
@@ -51,8 +59,10 @@ if [[ $TEMP > $MAXTEMP ]];
     curl -A "Warning: Temperature is too high! Activating dynamic fan control! ($TEMP C)" -fsS --retry 3 https://hc-ping.com/[hc-uuid]/fail >/dev/null 2>&1
     ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK raw 0x30 0x30 0x01 0x01
   else
+    ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK raw 0x30 0x30 0x01 0x00
+    ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK raw 0x30 0x30 0x02 0xff 0x09
     # healthchecks.io
     curl -A "Temperature is OK ($TEMP C)" -fsS --retry 3 https://hc-ping.com/[hc-uuid] >/dev/null 2>&1
-    printf "Temperature is OK ($TEMP C)" | systemd-cat -t R710-IPMI-TEMP
+    printf "Temperature is OK ($TEMP C) (Static fan speed 1560 RPM)" | systemd-cat -t R710-IPMI-TEMP
     echo "Temperature is OK ($TEMP C)"
 fi
