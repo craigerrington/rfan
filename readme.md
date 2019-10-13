@@ -15,6 +15,8 @@ Every time it runs, it reads the current system temp. If the temp is above a set
 
 Additionally, ping to healthcheck.io. The current system temperature is sent using the curl User Agent header. healthcheck.io extracts this data for logging. For a healthy temperature, a healthy ping is sent along with the current system temperature. In the event of a high temp detection, a failure alert is sent to healthcheck.io - this can be combined with automations from email alerts to slack. Because of the way healthcheck.io extracts the User Agent string, you can also use the current system temp in the automations.
 
+![screenshot](/media/sshot.PNG)
+
 #### Some of the notes from the original repo I found super useful in understanding how the IPMI parts works.
 (I've edited bits, so please accept any mistakes as mine) 
 
