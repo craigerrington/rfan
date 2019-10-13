@@ -1,12 +1,22 @@
 # rfan
 
-rfan is a pair of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the `NoLooseEnds/Scripts` repo. Other than some cleanup and changed defaults, so far most of the changes I've made personally are around the monitoring and enhanced failure alerts with healthcheck.io.
+rfan is a collection of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the `NoLooseEnds/Scripts` repo. Other than some cleanup and changed defaults, so far most of the changes I've made personally are around the monitoring and enhanced failure alerts with healthcheck.io.
 
 Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
 
-### setfans.sh
-a simple script which sets the fans to a static pre-defined speed (1560 RPM).
-It first enables static control, and then sets a static speed
+### rfan.sh
+
+I take no responsibility if this script causes your server to catch fire.
+
+This is the all in one script, if you are lazy AND BRAVE, this is what you want. This combines the features of `setfan.sh` and `monitor.sh`. It is designed to be scheduled with `cron` to run *every minute*.
+
+With the default configuration (and taking no heed to all the notes below and all the options you have), on launch it will:
+
+- Check the temperature from the server.
+- If it's below the defined threshold, it'll set the static speed of the fans to 1560 RPM, which should be pretty quiet.
+- It'll check on each run for the temperature, and should the temperature rise above the threshold, it'll re-enable automatic fan control (nice and noisy) to reduce the temperatures
+- Once the temperatue is back below the threshold, static fan speeds will be re-enabled back to 1560 RPM
+- Includes all of the monitoring features described below in `monitor.sh`
 
 ### monitor.sh
 monitor.sh should be scheduled with cron.
@@ -17,8 +27,12 @@ Additionally, pings to healthcheck.io are made. The current system temperature i
 
 ![screenshot](/media/sshot.PNG)
 
-#### Some of the notes from the original repo I found super useful in understanding how the IPMI parts works.
-(I've edited bits, so please accept any mistakes as mine) 
+### setfans.sh
+a simple script which sets the fans to a static pre-defined speed (1560 RPM).
+It first enables static control, and then sets a static speed
+
+#### Some of the notes from the original repo
+I found super useful in understanding how the IPMI parts works. I've edited bits, so please accept any mistakes as mine.
 
 #### Howto: Manually set the fan speed of the Dell R610/R710
 
@@ -37,6 +51,6 @@ Set fan speed (use something like http://www.hexadecimaldictionary.com/hexadecim
  - *1560 RPM*: `raw 0x30 0x30 0x02 0xff 0x09`
  - _Note: The RPM may differ from model to model_
 
-Disable / Return to automatic fan control: `raw 0x30 0x30 0x01 0x01
+Disable/return to automatic fan control: `raw 0x30 0x30 0x01 0x01
 
 List all output from IPMI: `sdr elist all`
