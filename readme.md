@@ -1,6 +1,6 @@
 # rfan
 
-rfan.sh is a dangerous bash script for working with the fans on a Dell R710. It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
+`rfan.sh` is a dangerous bash script for working with the fans on a Dell R710. It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
 
 - Created the combo script `rfan.sh`.
 - enhanced monitoring and failure alerts with healthcheck.io.
@@ -11,7 +11,7 @@ rfan.sh is a dangerous bash script for working with the fans on a Dell R710. It 
 
 Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
 
-### rfan.sh
+### `rfan.sh`
 
 The beautiful monster. I take no responsibility if this script causes your server to **catch fire**. Seriously. **There's a chance this will make things catch fire**. I am not an expert. I took some other scripts, mashed them together and added some nice reporting. Do not trust me with your life.
 
@@ -25,7 +25,7 @@ With the default configuration (and taking no heed to all the notes below and al
 - Once the temperatue is back below the threshold, static fan speeds will be re-enabled back to 1560 RPM
 - Includes all of the monitoring features described below in `monitor.sh`
 
-### monitor.sh
+### `monitor.sh`
 monitor.sh should be scheduled with cron.
 
 Every time it runs, it reads the current system temp. If the temp is above a set threshold, it immediately disables static fan control. This has the effect of enabling automatic controls, which will allow the fans to ramp up to the required speed to cool the server down.
@@ -34,7 +34,7 @@ Additionally, pings to healthcheck.io are made. The current system temperature i
 
 ![screenshot](/media/sshot.PNG)
 
-### setfans.sh
+### `setfans.sh`
 a simple script which sets the fans to a static pre-defined speed (1560 RPM).
 It first enables static control, and then sets a static speed
 
