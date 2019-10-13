@@ -1,12 +1,19 @@
 # rfan
 
-rfan is a collection of bash scripts for working with the fans on a Dell R710. They are based on the scripts found in the `NoLooseEnds/Scripts` repo. Other than some cleanup and changed defaults, so far most of the changes I've made personally are around the monitoring and enhanced failure alerts with healthcheck.io.
+rfan.sh is a dangerous bash script for working with the fans on a Dell R710. It is based on the scripts found in the `NoLooseEnds/Scripts` repo, modified versions of which are included in this repository. The changes I've made to the original scripts are:
+
+- Created the combo script `rfan.sh`.
+- enhanced monitoring and failure alerts with healthcheck.io.
+- updated some of the journalctl logging.
+- added temperatures to the healthcheck.io reporting
+- added failure reporting for integrations with healthcheck.io
+- removed the slack integration
 
 Both scripts require the ipmitool package to be installed and IPMI over LAN enabled on the server DRAC.
 
 ### rfan.sh
 
-The beautiful monster. I take no responsibility if this script causes your server to catch fire. Seriously. There's a chance this will make things catch fire. I am not an expert. I took some other scripts, mashed them together and added some nice reporting. Do not trust me with your life.
+The beautiful monster. I take no responsibility if this script causes your server to **catch fire**. Seriously. **There's a chance this will make things catch fire**. I am not an expert. I took some other scripts, mashed them together and added some nice reporting. Do not trust me with your life.
 
 This is the all in one script, if you are lazy AND BRAVE, this is what you want. This combines the features of `setfan.sh` and `monitor.sh`. It is designed to be scheduled with `cron` to run *every minute*.
 
