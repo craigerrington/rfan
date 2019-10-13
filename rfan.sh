@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------------------
-# Script for setting low fan speds/noise on Dell R710 servers.
+# rfan.sh a script for setting low fan speds/noise on Dell R710 servers.
+#
+# https://github.com/craigerrington/rfan
 #
 # This should be run as a cron job every 1 minute:
 #
@@ -54,10 +56,12 @@ TEMP=$(ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK sdr t
 
 if [[ $TEMP > $MAXTEMP ]];
   then
+    # Trigger high fan speed and set failure status:
     printf "Warning: Temperature is too high! Activating dynamic fan control! ($TEMP C)" | systemd-cat -t R710-IPMI-TEMP
     curl -A "Warning: Temperature is too high! Activating dynamic fan control! ($TEMP C)" -fsS --retry 3 https://hc-ping.com/[hc-uuid]/fail >/dev/null 2>&1
     ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK raw 0x30 0x30 0x01 0x01
   else
+    # Enable static fan control and set 1560 RPM
     ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK raw 0x30 0x30 0x01 0x00
     ipmitool -I lanplus -H $IPMIHOST -U $IPMIUSER -P $IPMIPW -y $IPMIEK raw 0x30 0x30 0x02 0xff 0x09
     # healthchecks.io
